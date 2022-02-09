@@ -23,7 +23,7 @@ ORDER BY LastName
 
 --4
 --Create a report showing Northwind's orders sorted by Freight from most expensive to cheapest.
--- Show OrderID, OrderDate, ShippedDate, CustomerID, and Freight.
+--Show OrderID, OrderDate, ShippedDate, CustomerID, and Freight.
 
 SELECT OrderID, OrderDate, ShippedDate,CustomerID, Freight
 FROM Orders
@@ -109,12 +109,14 @@ WHERE [Freight]>=500
 
 --12
 --Find the Total Number of Units Ordered of Product ID 3
+
 SELECT SUM([UnitsOnOrder]) AS 'Total Number'
 FROM Products
 where ProductID = 3
 
 --13
 --Retrieve the number of employees in each city
+
 SELECT*
 FROM Employees
 
