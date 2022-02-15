@@ -1,0 +1,220 @@
+use [Northwind]
+
+
+--TAP A
+--1
+SELECT [EmployeeID],UPPER ([LastName]),LOWER([FirstName])
+FROM Employees
+WHERE EmployeeID BETWEEN 2 AND 4
+
+--2
+SELECT [EmployeeID],UPPER ([FirstName]),LOWER([LastName])
+FROM Employees
+WHERE EmployeeID  NOT BETWEEN 2 AND 4
+
+--3
+SELECT [CompanyName], LEN([CompanyName]) LenName
+FROM Customers
+where LEN([CompanyName])>5
+
+--4
+--A
+SELECT [CompanyName], LEFT([CompanyName],3) Left_3
+FROM Customers
+where CompanyName LIKE 'A%'
+
+--B
+SELECT [CompanyName], LEFT([CompanyName],3) Left_3
+FROM Customers
+where CompanyName IN (
+SELECT [CompanyName]
+FROM Customers
+where LEFT([CompanyName],1)= 'A'
+)
+
+--C
+SELECT [CompanyName],REVERSE(RIGHT(REVERSE([CompanyName]),3)) Left_3
+FROM Customers
+where CompanyName LIKE 'A%'
+
+--D
+SELECT [CompanyName], SUBSTRING([CompanyName],1,3) Left_3
+FROM Customers
+where CompanyName LIKE 'A%'
+
+--5
+SELECT LastName,REVERSE([LastName]) rvrName
+FROM Employees
+WHERE ReportsTo IS NOT NULL
+
+--6
+SELECT UPPER( [ProductName])
+FROM Products
+WHERE ProductID NOT BETWEEN 10 AND 20
+ORDER BY ProductName
+
+--7
+SELECT CONCAT([FirstName],' ',[LastName]) FullName, CONCAT([FirstName],LEFT([LastName],1)) NewName
+FROM Employees
+where FirstName LIKE 'a%'
+
+--8
+SELECT CONCAT([FirstName],' ',[LastName]) FullName, CONCAT([FirstName],LEFT([LastName],1)) NewName
+FROM Employees
+where  [LastName] LIKE  '%G'
+
+--9
+SELECT CONCAT([FirstName],' ',[LastName]) FullName, CONCAT([FirstName],LEFT([LastName],1)) NewName
+FROM Employees
+where [LastName] LIKE '%g' and [FirstName] like 'a%'
+
+--10
+SELECT REPLACE([QuantityPerUnit],'-','=') NewQPU
+FROM Products
+WHERE [QuantityPerUnit] LIKE '%-%'
+
+--TAP B
+--11
+SELECT [ProductName],[UnitPrice],CAST( [UnitPrice]*1.2 AS DECIMAL(5,2)) NoUP
+FROM [dbo].[Products]
+WHERE UnitPrice IS NOT NULL
+ORDER BY UnitPrice
+
+--TAP C
+--12
+SELECT GETDATE()
+
+--13
+SELECT FirstName, HireDate, DATENAME(MM,[HireDate]) MM_HIRE, DATENAME(YY,[HireDate]) YY_HIRE
+FROM Employees
+
+--14
+SELECT FirstName, HireDate,DATEADD(MONTH,1,[HireDate]) AFTER_MONTH ,DATEDIFF(DD,[HireDate],GETDATE()) DD_DIF
+FROM Employees
+
+--15
+SELECT FirstName, HireDate,DATEADD(MONTH,1,[HireDate]) AFTER_MONTH ,DATEDIFF(DD,[BirthDate],[HireDate]) DD_DIF
+FROM Employees
+
+--16
+--A
+SELECT FirstName,[BirthDate],DATEDIFF(YY,[BirthDate],GETDATE()) 
+		- 
+		CASE 
+			WHEN (MONTH([BirthDate]) > = MONTH(GETDATE()))
+			OR
+			(MONTH([BirthDate]) = MONTH(GETDATE()) AND DAY([BirthDate]) > DAY(GETDATE()))
+		THEN 1
+		ELSE 0 
+		END
+AGE
+FROM Employees
+WHERE DATEDIFF(DD,[BirthDate],GETDATE()) > 40
+
+--B
+SELECT FirstName,[BirthDate],
+CASE WHEN dateadd(year, datediff (year,[BirthDate] , getdate()),[BirthDate] ) > getdate()
+            THEN datediff(year,[BirthDate] , getdate()) - 1
+            ELSE datediff(year,[BirthDate] , getdate())
+       END as Age
+FROM Employees
+WHERE DATEDIFF(DD,[BirthDate],GETDATE()) > 40
+
+--C
+SELECT FirstName,[BirthDate],
+DATEDIFF(year,[BirthDate] , GETDATE()) -
+CASE WHEN DATEPART(dayofyear,[BirthDate] ) > DATEPART(dayofyear, GETDATE()) THEN 1 ELSE 0 END
+FROM Employees
+WHERE DATEDIFF(DD,[BirthDate],GETDATE()) > 40
+
+
+--17
+SELECT FirstName,[BirthDate],
+DATEDIFF(year,[BirthDate] , GETDATE()) -
+CASE WHEN DATEPART(dayofyear,[BirthDate] ) > DATEPART(dayofyear, GETDATE()) THEN 1 ELSE 0 END
+FROM Employees
+WHERE DATEDIFF(year,[BirthDate] , GETDATE()) -
+CASE WHEN DATEPART(dayofyear,[BirthDate] ) > DATEPART(dayofyear, GETDATE()) THEN 1 ELSE 0 END
+BETWEEN 20 AND 30
+
+--18
+SELECT *
+FROM Employees EMP
+WHERE day(EMP.BirthDate) = DAY (getdate()) AND MONTH(EMP.BirthDate) = MONTH (getdate())
+
+--19
+SELECT *
+FROM Employees
+WHERE DATEDIFF(YY,[HireDate],GETDATE())>=4
+
+--20
+SELECT [OrderDate],DATENAME(WEEKDAY,DAY([OrderDate])),DATENAME(MM,MONTH([OrderDate])),YEAR([OrderDate])
+FROM Orders
+
+--21
+SELECT [OrderID],[OrderDate],[RequiredDate],DATEPART(QUARTER,[OrderDate]) QUARTER
+FROM Orders
+WHERE DATEPART(QUARTER,[OrderDate]) = 2
+
+--22
+SELECT [OrderID],[OrderDate],[RequiredDate],DATEPART(QUARTER,[OrderDate]) QUARTER
+FROM Orders
+WHERE DATEPART(QUARTER,[OrderDate]) = 3
+
+--TAP D
+--23
+SELECT CAST([FirstName] AS varchar(25)) + CAST([HireDate] AS varchar(25))AS COLONSE_1,
+		CAST([LastName] AS varchar(25)) + CAST([Extension]AS varchar(25))AS COLONSE_2
+FROM Employees
+
+--24
+SELECT *
+FROM Customers
+WHERE Country LIKE 'B%L'
+
+SELECT *
+FROM Customers
+WHERE LEFT([Country],1) = 'B' AND RIGHT([Country],1)='L'
+
+SELECT *
+FROM Customers
+WHERE CAST(LEFT([Country],1) AS char(1)) = 'B' AND CAST(RIGHT([Country],1) AS CHAR(1))='L'
+
+
+--25A
+SELECT [LastName],
+		CAST(UPPER([Country]) AS varchar(25)) + CAST([EmployeeID] AS varchar(25)),
+		CAST([HireDate] AS int) + CAST([BirthDate] AS int)
+FROM Employees
+WHERE SUBSTRING([LastName],1,1) IN ('A','S')
+
+--25B
+SELECT [LastName],
+		CAST(UPPER([Country]) AS varchar(25)) + CAST([EmployeeID] AS varchar(25)),
+		CONCAT([HireDate],[BirthDate])
+FROM Employees
+WHERE SUBSTRING([LastName],1,1) ='A' 
+OR
+SUBSTRING([LastName],1,1) ='S'
+
+
+--25C
+SELECT [LastName],
+		CAST(UPPER([Country]) AS varchar(25)) + CAST([EmployeeID] AS varchar(25)),
+		CONCAT(CAST([HireDate] AS date ),CAST([BirthDate] AS date))
+FROM Employees
+
+
+--26
+SELECT CONCAT('THE ORDER ID',' ' ,[OrderID],' ',' IS FROM DATE',' ',[OrderDate])
+FROM Orders
+WHERE [OrderID] BETWEEN 10245 AND 10431
+
+--27
+SELECT [CompanyName],[ContactName],CITY,[Address],ISNULL([Phone],'N/A') PHONE,ISNULL([Fax],'N/A') FAX
+FROM Customers
+WHERE City = 'LONDON'
+
+--28
+SELECT ISNULL([Region],'Unknown') REGION,[CompanyName],[SupplierID]
+FROM Suppliers
