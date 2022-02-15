@@ -1,0 +1,60 @@
+--MODULE_1
+-– SELECT
+
+--1
+SELECT *
+FROM Customers
+
+--2
+SELECT CustomerID, EmployeeID
+FROM Orders
+
+--3
+SELECT CustomerID AS ID, CompanyName AS CompName,City AS Cit
+FROM Customers
+
+--4
+SELECT EmployeeID AS ID, LastName AS Lname,FirstName AS Fname
+FROM Employees
+
+--5
+SELECT Address +' ,' + City AS "Full Address"
+FROM Suppliers
+
+--6
+SELECT FirstName + ' ' + LastName, BirthDate, ReportsTo AS Manager
+FROM Employees
+
+--7
+SELECT DISTINCT FirstName 
+FROM Employees
+
+SELECT DISTINCT BirthDate
+FROM Employees
+
+SELECT DISTINCT  Title	
+FROM Employees
+
+--8
+SELECT DISTINCT City
+FROM Customers
+
+SELECT DISTINCT Country
+FROM Customers
+
+SELECT DISTINCT City, Country
+FROM Customers
+
+--9
+SELECT *
+FROM Products
+
+SELECT ProductName, ProductID,UnitsOnOrder, UnitsInStock + 10 AS "Stock More10"
+FROM Products
+
+--10
+SELECT*
+FROM Employees
+
+SELECT FirstName,Title,dateadd(MM,1,HireDate) AS "Month After Hire"
+FROM Employees
