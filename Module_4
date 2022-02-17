@@ -1,0 +1,149 @@
+USE [Northwind]
+
+--MODULE_4A
+--1A
+SELECT MIN(LastName) MIN_LN
+FROM Employees
+
+--1B
+SELECT TOP 1 LASTNAME
+FROM Employees
+ORDER BY LastName 
+
+--1C
+SELECT TOP 1 LastName
+FROM Employees
+GROUP BY LastName
+
+--2
+SELECT [ProductName] ,AVG([UnitPrice]) AVG_UP
+FROM Products
+GROUP BY [ProductName]
+ORDER BY [ProductName]
+
+--3
+SELECT MAX(LASTNAME)
+FROM Employees
+
+--4
+SELECT COUNT(*) COUNT
+FROM Employees
+
+--5
+SELECT COUNTRY,COUNT(Country) No
+FROM Customers
+GROUP BY Country
+
+--6
+SELECT COUNT(FAX) No
+FROM Customers
+
+--7
+SELECT Fax,COUNT(*) No
+FROM Customers
+WHERE FAX IS NULL
+GROUP BY Fax
+
+--8
+SELECT MIN([BirthDate]) MIN_BD, MAX([BirthDate]) MAX_BD
+FROM Employees
+
+--9
+SELECT CustomerID ,COUNT([OrderID] ) No_ORD,
+					COUNT(DISTINCT CustomerID) NoCID 
+FROM Orders
+GROUP BY CustomerID
+
+--Module_4B
+--10
+SELECT Country, COUNT([CustomerID])
+FROM Customers
+GROUP BY Country
+ORDER BY COUNT([CustomerID]) DESC
+
+--11
+SELECT CategoryID, AVG([UnitPrice]) AVG_P,
+					MAX([UnitPrice]) MAX_P,
+					MIN([UnitPrice]) MIN_P
+FROM Products
+GROUP BY CategoryID
+
+--12
+SELECT [Country],COUNT(DISTINCT CITY) NoCity
+FROM [dbo].[Customers]
+GROUP BY [Country]
+
+--13
+SELECT CategoryID, MAX([UnitPrice]) MAX_P
+FROM Products
+GROUP BY CategoryID
+
+--14
+SELECT [CategoryID], AVG([UnitPrice]) AVG_P,
+					MAX([UnitPrice]) MAX_P,
+					MIN([UnitPrice]) MIN_P
+FROM Products
+WHERE [CategoryID] IN (3,4)
+GROUP BY [CategoryID]
+
+--15
+SELECT PRD.CategoryID,COUNT( [ProductID]) NoPROD
+FROM Products PRD
+GROUP BY PRD.CategoryID
+
+--16
+SELECT PRD.ProductName,COUNT( [ProductID]) NoPROD
+FROM Products PRD
+GROUP BY PRD.ProductName
+HAVING COUNT( [ProductID])>100
+
+--17
+SELECT PRD.CategoryID,COUNT( [ProductID]) NoPROD
+FROM Products PRD
+GROUP BY PRD.CategoryID
+HAVING COUNT( [ProductID])>10
+
+--18
+SELECT Country,City,COUNT(  [CustomerID]) No_CID
+FROM Customers
+WHERE CITY = 'LONDON'
+GROUP BY City, Country
+
+--19
+SELECT CategoryID, AVG([UnitsOnOrder]) AVG_UOO
+FROM Products
+GROUP BY CategoryID
+HAVING AVG([UnitsOnOrder])>4
+
+--20
+SELECT[CustomerID],COUNT(*) No_CUST,ISNULL([ShipRegion],'N/A') SR
+FROM Orders
+WHERE [ShipRegion] IS NULL
+GROUP BY CustomerID, ISNULL([ShipRegion],'N/A')
+
+--B
+SELECT[CustomerID],COUNT(*) NoOrders,ISNULL([ShipRegion],'N/A')
+FROM Orders
+WHERE [ShipRegion] IS NULL
+GROUP BY CustomerID, ISNULL([ShipRegion],'N/A')
+HAVING count (*)>6
+ORDER BY COUNT(*) DESC
+
+--21
+SELECT [Region],[City],COUNT(*) NoCUST
+FROM Customers
+WHERE Region IS NOT NULL
+AND
+(City LIKE '%L%' AND CITY LIKE '%M%')
+GROUP BY Region, City
+
+--12
+SELECT Country, COUNT(DISTINCT City) NoCITY
+FROM Customers
+GROUP BY Country
+
+--22
+SELECT Region, COUNT(DISTINCT City) NoCITY
+FROM Customers
+GROUP BY Region
+HAVING COUNT(DISTINCT City)>=2
