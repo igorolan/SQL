@@ -1,0 +1,129 @@
+use [Northwind]
+
+
+--TAP 5
+--1
+SELECT DISTINCT CTG.CategoryName,PRD.ProductName
+FROM Products PRD
+INNER JOIN Categories CTG
+ON  PRD.CategoryID=CTG.CategoryID
+
+--2
+SELECT PRD.ProductName,SPL.CompanyName
+FROM Products PRD
+INNER JOIN Suppliers SPL
+ON PRD.SupplierID=SPL.SupplierID
+
+--3
+SELECT ORD.OrderID, CST.CompanyName
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+
+--4
+SELECT ORD.OrderID, CST.CompanyName
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+WHERE CST.ContactName LIKE 'A%' OR CST.ContactName LIKE 'B%'
+
+--5
+SELECT TR.TerritoryDescription,RG.RegionDescription
+FROM Region RG
+INNER JOIN Territories TR
+ON RG.RegionID=TR.RegionID
+
+--6
+SELECT *
+FROM Products PR
+INNER JOIN Categories CT
+ON PR.CategoryID=CT.CategoryID
+WHERE UnitPrice >30
+
+--7
+SELECT PR.ProductName, SP.CompanyName
+FROM Products PR
+INNER JOIN Suppliers SP
+ON PR.SupplierID=SP.SupplierID
+WHERE PR.ProductID=3
+
+--8
+SELECT PR.ProductName,PR.CategoryID  ,SP.CompanyName
+FROM Products PR
+INNER JOIN Suppliers SP
+ON PR.SupplierID=SP.SupplierID
+
+--9
+SELECT CST.CompanyName, ORD.OrderID
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+
+--10
+SELECT PR.ProductName, SP.CompanyName, SP.Country
+FROM Products PR
+INNER JOIN Suppliers SP
+ON PR.SupplierID=SP.SupplierID
+WHERE Country LIKE 'A%'
+
+--11
+SELECT PR.ProductName,CTG.CategoryName, SP.City
+FROM Products PR
+INNER JOIN Suppliers SP
+ON PR.SupplierID=SP.SupplierID
+INNER JOIN Categories CTG
+ON CTG.CategoryID=PR.CategoryID
+ORDER BY CTG.CategoryName
+
+--12
+SELECT PR.ProductName,CTG.CategoryName, SP.City
+FROM Products PR
+INNER JOIN Suppliers SP
+ON PR.SupplierID=SP.SupplierID
+INNER JOIN Categories CTG
+ON CTG.CategoryID=PR.CategoryID
+WHERE SP.City IN ('TOKYO') OR SP.City IN('LONDON')
+ORDER BY CTG.CategoryName
+
+--13
+SELECT ORD.OrderID, ORD.OrderDate, ORD.ShipAddress, CST.CustomerID, CST.CompanyName, CST.Phone
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+
+--14
+SELECT ORD.OrderID, ORD.OrderDate, ORD.ShipAddress, CST.CustomerID, CST.CompanyName, CST.Phone
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+WHERE YEAR(ORD.OrderDate)=1996
+	AND (CST.CustomerID LIKE 'A%' OR CST.CustomerID LIKE 'B%')
+
+--15
+SELECT ORD.OrderID, ORD.OrderDate, ORD.ShipAddress, CST.CustomerID, CST.CompanyName, CST.Phone, EMP.FirstName,EMP.LastName
+FROM Orders ORD
+INNER JOIN Customers CST
+ON ORD.CustomerID=CST.CustomerID
+INNER JOIN Employees EMP
+ON EMP.EmployeeID=ORD.EmployeeID
+WHERE YEAR(ORD.OrderDate)=1996
+	AND (CST.CustomerID LIKE 'A%' OR CST.CustomerID LIKE 'B%')
+ORDER BY ORD.OrderDate
+
+--16
+SELECT OrderID, COUNT([ProductID]) NoPRODUCT
+FROM [dbo].[Order Details]
+GROUP BY OrderID
+
+--17
+SELECT PRD.ProductName, PRD.UnitPrice, PRD.CategoryID,SPP.CompanyName
+FROM Products PRD
+INNER JOIN Suppliers SPP
+ON PRD.SupplierID=SPP.SupplierID
+
+--18
+SELECT PRD.ProductName, PRD.UnitPrice, PRD.CategoryID,SPP.CompanyName, SPP.SupplierID
+FROM Products PRD
+INNER JOIN Suppliers SPP
+ON PRD.SupplierID=SPP.SupplierID
+WHERE SPP.SupplierID IN (16,2)
